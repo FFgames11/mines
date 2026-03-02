@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mines</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="logo">MINES<span>HL</span></div>
+    <div class="topbar-right">
+      <div class="balance-pill">💰 $<span id="topbar-balance">100.00</span></div>
+      <div class="btn-wallet">Wallet</div>
+      <div class="btn-demo">Demo Mode</div>
+    </div>
+  </div>
+
+  <!-- Layout -->
+  <div class="layout">
+
+    <!-- Left Panel -->
+    <div class="left-panel">
+
+      <div class="panel-section">
+        <label class="panel-label">Bet Amount</label>
+        <div class="bet-input-row">
+          <div class="bet-input-wrap">
+            <span class="dollar">$</span>
+            <input type="number" id="bet-input" value="10" min="1" />
+          </div>
+        </div>
+        <div class="bet-quick-row">
+          <button class="quick-btn" id="btn-half">½</button>
+          <button class="quick-btn" id="btn-double">2×</button>
+          <button class="quick-btn" id="btn-max">Max</button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <label class="panel-label">Mines</label>
+        <div class="mines-row">
+          <button class="mine-adj" id="btn-mine-dec">−</button>
+          <div class="mine-display">💣 <span id="mine-count">1</span></div>
+          <button class="mine-adj" id="btn-mine-inc">+</button>
+        </div>
+      </div>
+
+      <div class="info-card teal">
+        <div class="info-label">Safe Tiles</div>
+        <div class="info-value teal" id="safe-tiles">💎 24</div>
+      </div>
+
+      <div class="info-card dark">
+        <div class="info-label">Current Multiplier</div>
+        <div class="info-value gold" id="current-mult">1.00×</div>
+        <div class="info-sub" id="next-mult-label"></div>
+      </div>
+
+      <button class="btn-auto" id="btn-auto">⚡ Auto Play</button>
+
+      <div class="spacer"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <div class="stat">
+          <div class="stat-label">Diamonds Found</div>
+          <div class="stat-value teal" id="stat-diamonds">💎 0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Profit</div>
+          <div class="stat-value teal" id="stat-profit">+$0.00</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Multiplier</div>
+          <div class="stat-value gold" id="stat-mult">1.00×</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Current Payout</div>
+          <div class="stat-value teal" id="stat-payout">—</div>
+        </div>
+        <div class="stat-result" id="stat-result"></div>
+      </div>
+
+      <!-- Auto Banner -->
+      <div class="auto-banner hidden" id="auto-banner">
+        <span id="auto-banner-icon">⚡</span>
+        <span id="auto-banner-text">Auto Play active — 25 rounds remaining</span>
+      </div>
+
+      <!-- Grid Wrapper -->
+      <div class="grid-wrapper" id="grid-wrapper">
+        <div class="grid" id="grid"></div>
+
+        <!-- Win Modal -->
+        <div class="win-modal hidden" id="win-modal">
+          <div class="win-modal-inner">
+            <div class="win-mult" id="win-mult-label">2.58×</div>
+            <div class="win-amount" id="win-amount-label">$25.80</div>
+            <div class="win-divider"></div>
+            <div class="win-balance" id="win-balance-label">$125.80</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="action-row">
+        <button class="btn-place-bet" id="btn-place-bet">🎮 Place Bet $10</button>
+        <button class="btn-cashout hidden" id="btn-cashout">💰 Cash Out</button>
+      </div>
+
+      <!-- Multiplier Strip -->
+      <div class="mult-strip" id="mult-strip"></div>
+
+    </div>
+  </div>
+
+  <!-- Auto Play Modal -->
+  <div class="overlay hidden" id="auto-overlay">
+    <div class="auto-modal">
+      <div class="auto-modal-header">
+        <div>
+          <div class="auto-modal-title">⚡ Auto Play Setup</div>
+          <div class="auto-modal-sub">Pick your tile pattern and how many rounds to run</div>
+        </div>
+        <button class="btn-close-modal" id="btn-close-auto">×</button>
+      </div>
+
+      <div class="auto-modal-body">
+        <!-- Round selector -->
+        <div class="round-selector">
+          <div class="round-label">Rounds</div>
+          <button class="round-btn active" data-rounds="25">25</button>
+          <button class="round-btn" data-rounds="50">50</button>
+          <button class="round-btn" data-rounds="75">75</button>
+          <button class="round-btn" data-rounds="100">100</button>
+        </div>
+
+        <div class="modal-divider"></div>
+
+        <!-- Pattern picker -->
+        <div class="pattern-section">
+          <div class="pattern-header">
+            <span class="pattern-title">Tile Pattern</span>
+            <div class="pattern-header-right">
+              <span class="pattern-count" id="pattern-count">0 / 24 selected</span>
+              <button class="btn-clear-pattern" id="btn-clear-pattern">Clear</button>
+            </div>
+          </div>
+          <div class="pattern-grid" id="pattern-grid"></div>
+          <div class="pattern-hint" id="pattern-hint">
+            💡 Click tiles to mark where the auto player clicks each round. Max <strong id="hint-max">24</strong> tiles with <strong id="hint-mines" class="red">1 mine</strong> active.
+          </div>
+        </div>
+      </div>
+
+      <div class="auto-modal-footer">
+        <button class="btn-cancel-auto" id="btn-cancel-auto">Cancel</button>
+        <button class="btn-start-auto" id="btn-start-auto" disabled>▶ Start 25 Rounds</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
